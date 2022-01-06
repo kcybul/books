@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../settings/settings_view.dart';
-import 'sample_item.dart';
-import 'sample_item_details_view.dart';
+import 'book.dart';
+import 'book_details_view.dart';
 
 /// Displays a list of SampleItems.
-class SampleItemListView extends StatelessWidget {
-  const SampleItemListView({
+class BookListView extends StatelessWidget {
+  const BookListView({
     Key? key,
     this.items = const [
       Book('Czysta architektura'),
@@ -66,7 +66,7 @@ class SampleItemListView extends StatelessWidget {
                 // background, the navigation stack is restored.
                 Navigator.restorablePushNamed(
                   context,
-                  SampleItemDetailsView.routeName,
+                  BookDetailsView.routeName,
                 );
               });
         },
