@@ -1,21 +1,19 @@
+import 'package:books/src/my_books_feature/book_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'sample_feature/book.dart';
-import 'sample_feature/book_details_view.dart';
-import 'sample_feature/book_list_view.dart';
+import 'my_books_feature/book.dart';
+import 'my_books_feature/book_details_view.dart';
+import 'my_books_feature/book_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
-/// The Widget that configures your application.
-class BooksApp extends StatelessWidget {
-  const BooksApp({
-    Key? key,
-    required this.settingsController,
-  }) : super(key: key);
+class _BooksAppState extends State<BooksApp> {
+  _BooksAppState(this.settingsController, this.bookDataService);
 
   final SettingsController settingsController;
+  final BookService bookDataService;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +56,7 @@ class BooksApp extends StatelessWidget {
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
           theme: ThemeData(),
-          darkTheme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support
@@ -71,10 +69,14 @@ class BooksApp extends StatelessWidget {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
                   case BookDetailsView.routeName:
-                    return const BookDetailsView();
+                    return BookDetailsView(
+                      book: routeSettings.arguments as Book,
+                    );
                   case BookListView.routeName:
                   default:
-                    return const BookListView();
+                    return BookListView(
+                      bookDataService: bookDataService,
+                    );
                 }
               },
             );
@@ -83,4 +85,21 @@ class BooksApp extends StatelessWidget {
       },
     );
   }
+}
+
+/// The Widget that configures your application.
+class BooksApp extends StatefulWidget {
+  const BooksApp({
+    Key? key,
+    required this.settingsController,
+    required this.bookDataService,
+  }) : super(key: key);
+
+  final SettingsController settingsController;
+  final BookService bookDataService;
+
+  @override
+  _BooksAppState createState() =>
+      // ignore: no_logic_in_create_state
+      _BooksAppState(settingsController, bookDataService);
 }

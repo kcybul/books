@@ -1,8 +1,11 @@
+import 'package:books/src/my_books_feature/book.dart';
 import 'package:flutter/material.dart';
 
 /// Displays detailed information about a SampleItem.
 class BookDetailsView extends StatelessWidget {
-  const BookDetailsView({Key? key}) : super(key: key);
+  const BookDetailsView({Key? key, required this.book}) : super(key: key);
+
+  final Book book;
 
   static const routeName = '/book';
 
@@ -10,10 +13,10 @@ class BookDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Item Details'),
+        title: Text(book.name),
       ),
-      body: const Center(
-        child: Text('More Information Here'),
+      body: Center(
+        child: Text(book.toString()),
       ),
     );
   }
