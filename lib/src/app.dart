@@ -1,4 +1,3 @@
-import 'package:books/src/my_books_feature/book_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,11 +8,12 @@ import 'my_books_feature/book_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
-class _BooksAppState extends State<BooksApp> {
-  _BooksAppState(this.settingsController, this.bookDataService);
+/// The Widget that configures your application.
+class BooksApp extends StatelessWidget {
+  const BooksApp({Key? key, required this.settingsController})
+      : super(key: key);
 
   final SettingsController settingsController;
-  final BookService bookDataService;
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +74,7 @@ class _BooksAppState extends State<BooksApp> {
                     );
                   case BookListView.routeName:
                   default:
-                    return BookListView(
-                      bookDataService: bookDataService,
-                    );
+                    return const BookListView();
                 }
               },
             );
@@ -85,21 +83,4 @@ class _BooksAppState extends State<BooksApp> {
       },
     );
   }
-}
-
-/// The Widget that configures your application.
-class BooksApp extends StatefulWidget {
-  const BooksApp({
-    Key? key,
-    required this.settingsController,
-    required this.bookDataService,
-  }) : super(key: key);
-
-  final SettingsController settingsController;
-  final BookService bookDataService;
-
-  @override
-  _BooksAppState createState() =>
-      // ignore: no_logic_in_create_state
-      _BooksAppState(settingsController, bookDataService);
 }

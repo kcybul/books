@@ -1,6 +1,7 @@
 import 'package:books/src/my_books_feature/book.dart';
 import 'package:books/src/my_books_feature/book_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -29,12 +30,11 @@ void main() async {
     Book('Wzorce Projektowe')
   ];
 
-  final bookDataService = BookService(books);
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.
-  runApp(BooksApp(
-    settingsController: settingsController,
-    bookDataService: bookDataService,
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => BookService(books))],
+    child: BooksApp(settingsController: settingsController),
   ));
 }

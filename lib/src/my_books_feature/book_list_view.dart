@@ -1,15 +1,16 @@
-import 'package:books/src/my_books_feature/book.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../settings/settings_view.dart';
+import 'book_add.dart';
 import 'book_details_view.dart';
 import 'book_service.dart';
 
-class _BookListViewState extends State<BookListView> {
-  _BookListViewState(this.bookDataService);
+/// Displays a list of SampleItems.
+class BookListView extends StatelessWidget {
+  const BookListView({Key? key}) : super(key: key);
 
-  final BookService bookDataService;
-
+  static const routeName = '/';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +40,9 @@ class _BookListViewState extends State<BookListView> {
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
         restorationId: 'sampleItemListView',
-        itemCount: bookDataService.items.length,
+        itemCount: context.watch<BookService>().items.length,
         itemBuilder: (BuildContext context, int index) {
-          final item = bookDataService.items[index];
+          final item = context.watch<BookService>().items[index];
 
           return ListTile(
               title: Text(item.name),
@@ -62,10 +63,7 @@ class _BookListViewState extends State<BookListView> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => AddBook(
-                      bookDataService: bookDataService,
-                    )),
+            MaterialPageRoute(builder: (context) => AddBook()),
           );
         },
         backgroundColor: Colors.blue,
@@ -73,88 +71,4 @@ class _BookListViewState extends State<BookListView> {
       ),
     );
   }
-}
-
-/// Displays a list of SampleItems.
-class BookListView extends StatefulWidget {
-  const BookListView({
-    Key? key,
-    required this.bookDataService,
-  }) : super(key: key);
-
-  static const routeName = '/';
-
-  final BookService bookDataService;
-
-  @override
-  // ignore: no_logic_in_create_state
-  _BookListViewState createState() => _BookListViewState(bookDataService);
-}
-
-//new item
-
-class _AddBookState extends State<AddBook> {
-  _AddBookState(this.bookDataService);
-
-  final BookService bookDataService;
-  final bookNameController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add Book"),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: bookNameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Book name',
-              ),
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        bookDataService.addBook(Book(bookNameController.text));
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Add'),
-                  )),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Go back!'),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class AddBook extends StatefulWidget {
-  const AddBook({Key? key, required this.bookDataService}) : super(key: key);
-
-  final BookService bookDataService;
-
-  @override
-  // ignore: no_logic_in_create_state
-  _AddBookState createState() => _AddBookState(bookDataService);
 }
